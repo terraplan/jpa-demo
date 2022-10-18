@@ -3,8 +3,10 @@ package com.terraplan.demo.jpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class OrderService {
@@ -16,10 +18,13 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
-        return repository.save(order);
+        Order savedOrder = repository.save(order);
+        order.getOrderItems().forEach(orderItem -> orderItem.setOrder(savedOrder));
+        return savedOrder;
     }
 
     public Order updateOrder(Order order) {
+        order.getOrderItems().forEach(orderItem -> orderItem.setOrder(order));
         return repository.save(order);
     }
 
