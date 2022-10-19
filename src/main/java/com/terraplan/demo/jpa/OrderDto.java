@@ -11,12 +11,14 @@ public class OrderDto {
     private String id;
     private String name;
     private List<OrderItemDto> orderItems = new ArrayList<>();
+    private String placeId;
 
     public static OrderDto fromOrder(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId() != null ? order.getId().toString() : null);
         orderDto.setName(order.getName());
         orderDto.setOrderItems(order.getOrderItems().stream().map(OrderItemDto::fromOrderItem).toList());
+        orderDto.setPlaceId(null != order.getPlace() ? order.getPlace().getId().toString() : null);
         return orderDto;
     }
 

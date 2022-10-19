@@ -14,6 +14,9 @@ public class OrderController {
 
     private final OrderService service;
 
+    // FIXME this is actually not allowed here => use a service ... or move someplace else
+    private final PlaceRepository placeRepository;
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDto> findOrder(@PathVariable Long id) {
 
@@ -26,6 +29,12 @@ public class OrderController {
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
 
         Order order = orderDto.toOrder();
+        // FIXME handle place: retrieve the place from repository
+        if (null != orderDto.getPlaceId()) {
+            Place place = placeRepository.findById(Long.valueOf(orderDto.getPlaceId())).orElseThrow();
+            order.setPlace(place);
+        }
+
         order = service.createOrder(order);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderDto.fromOrder(order));
@@ -36,6 +45,11 @@ public class OrderController {
 
         Order order = orderDto.toOrder();
         order.setId(id); // should not be needed ...
+        // FIXME handle place: retrieve the place from repository
+        if (null != orderDto.getPlaceId()) {
+            Place place = placeRepository.findById(Long.valueOf(orderDto.getPlaceId())).orElseThrow();
+            order.setPlace(place);
+        }
 
         order = service.updateOrder(order);
 
