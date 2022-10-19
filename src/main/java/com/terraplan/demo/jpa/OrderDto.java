@@ -12,6 +12,7 @@ public class OrderDto {
     private String name;
     private List<OrderItemDto> orderItems = new ArrayList<>();
     private String placeId;
+    private List<String> comments = new ArrayList<>();
 
     public static OrderDto fromOrder(Order order) {
         OrderDto orderDto = new OrderDto();
@@ -19,6 +20,7 @@ public class OrderDto {
         orderDto.setName(order.getName());
         orderDto.setOrderItems(order.getOrderItems().stream().map(OrderItemDto::fromOrderItem).toList());
         orderDto.setPlaceId(null != order.getPlace() ? order.getPlace().getId().toString() : null);
+        orderDto.setComments(order.getComments().stream().map(comment -> comment.getId().toString()).toList());
         return orderDto;
     }
 

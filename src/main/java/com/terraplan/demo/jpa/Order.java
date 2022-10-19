@@ -24,8 +24,8 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     // unidirectional one2many
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Place> places = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Comment> comments = new ArrayList<>();
 
     // place example: place also be used for other Order objects
     // orphanRemoval = true:: depends on whether we want to keep places ...

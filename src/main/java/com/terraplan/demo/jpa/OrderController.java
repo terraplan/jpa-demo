@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class OrderController {
 
     // FIXME this is actually not allowed here => use a service ... or move someplace else
     private final PlaceRepository placeRepository;
+    private final CommentRepository commentRepository;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDto> findOrder(@PathVariable Long id) {
@@ -34,6 +37,12 @@ public class OrderController {
             Place place = placeRepository.findById(Long.valueOf(orderDto.getPlaceId())).orElseThrow();
             order.setPlace(place);
         }
+        // FIXME handle comments
+        List<Comment> comments = new ArrayList<>();
+        for (String commentId : orderDto.getComments()) {
+            comments.add(commentRepository.findById(Long.valueOf(commentId)).orElseThrow());
+        }
+        order.setComments(comments);
 
         order = service.createOrder(order);
 
@@ -50,6 +59,12 @@ public class OrderController {
             Place place = placeRepository.findById(Long.valueOf(orderDto.getPlaceId())).orElseThrow();
             order.setPlace(place);
         }
+        // FIXME handle comments
+        List<Comment> comments = new ArrayList<>();
+        for (String commentId : orderDto.getComments()) {
+            comments.add(commentRepository.findById(Long.valueOf(commentId)).orElseThrow());
+        }
+        order.setComments(comments);
 
         order = service.updateOrder(order);
 
