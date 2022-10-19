@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,6 +33,10 @@ public class Order {
     // orphanRemoval = true:: depends on whether we want to keep places ...
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Place place;
+
+    // unidirectional many2many
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Comment> sharedComments = new HashSet<>();
 
     // bidirectional many2many
 

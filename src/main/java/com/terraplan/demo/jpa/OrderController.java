@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,6 +42,12 @@ public class OrderController {
         }
         order.setComments(comments);
 
+        Set<Comment> sharedComments = new HashSet<>();
+        for (String commentId : orderDto.getSharedComments()) {
+            sharedComments.add(commentRepository.findById(Long.valueOf(commentId)).orElseThrow());
+        }
+        order.setSharedComments(sharedComments);
+
         order = service.createOrder(order);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderDto.fromOrder(order));
@@ -65,6 +69,12 @@ public class OrderController {
             comments.add(commentRepository.findById(Long.valueOf(commentId)).orElseThrow());
         }
         order.setComments(comments);
+
+        Set<Comment> sharedComments = new HashSet<>();
+        for (String commentId : orderDto.getSharedComments()) {
+            sharedComments.add(commentRepository.findById(Long.valueOf(commentId)).orElseThrow());
+        }
+        order.setSharedComments(sharedComments);
 
         order = service.updateOrder(order);
 
