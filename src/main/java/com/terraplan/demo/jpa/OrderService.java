@@ -20,11 +20,24 @@ public class OrderService {
     public Order createOrder(Order order) {
         Order savedOrder = repository.save(order);
         order.getOrderItems().forEach(orderItem -> orderItem.setOrder(savedOrder));
+        order.getCustomers().forEach(customer -> customer.addOrder(order));
         return savedOrder;
     }
 
     public Order updateOrder(Order order) {
+
+        Order originalOrder = repository.findById(order.getId()).orElseThrow();
+
         order.getOrderItems().forEach(orderItem -> orderItem.setOrder(order));
+
+        // remove the order from all customers that are in the originalOrders customers but not in the new one
+        // simple solution: delete all and add them again ...
+        originalOrder.getCustomers().forEach(customer -> customer.removeOrder(order));
+
+        // for each customer adapt the order in the set of orders
+        order.getCustomers().forEach(customer -> customer.addOrder(order));
+
+        // !! we save the provided order, not the original one loaded from the repository!
         return repository.save(order);
     }
 

@@ -17,6 +17,7 @@ public class OrderDto {
     private String placeId;
     private List<String> comments = new ArrayList<>();
     private Set<String> sharedComments = new HashSet<>();
+    private Set<String> customers = new HashSet<>();
 
     public static OrderDto fromOrder(Order order) {
         OrderDto orderDto = new OrderDto();
@@ -26,6 +27,7 @@ public class OrderDto {
         orderDto.setPlaceId(null != order.getPlace() ? order.getPlace().getId().toString() : null);
         orderDto.setComments(order.getComments().stream().map(comment -> comment.getId().toString()).toList());
         orderDto.setSharedComments(order.getSharedComments().stream().map(comment -> comment.getId().toString()).collect(Collectors.toSet()));
+        orderDto.setCustomers(order.getCustomers().stream().map(customer -> customer.getId().toString()).collect(Collectors.toSet()));
         return orderDto;
     }
 

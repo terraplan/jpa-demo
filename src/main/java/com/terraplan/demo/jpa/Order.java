@@ -38,7 +38,9 @@ public class Order {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Comment> sharedComments = new HashSet<>();
 
-    // bidirectional many2many
+    // bidirectional many2many (although multiple customers per order do not make much sense ...)
+    @ManyToMany
+    private Set<Customer> customers = new HashSet<>();
 
     // map example
 }

@@ -17,6 +17,7 @@ public class OrderController {
     // FIXME this is actually not allowed here => use a service ... or move someplace else
     private final PlaceRepository placeRepository;
     private final CommentRepository commentRepository;
+    private final CustomerRepository customerRepository;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDto> findOrder(@PathVariable Long id) {
@@ -48,6 +49,12 @@ public class OrderController {
         }
         order.setSharedComments(sharedComments);
 
+        Set<Customer> customers = new HashSet<>();
+        for (String customerId : orderDto.getCustomers()) {
+            customers.add(customerRepository.findById(Long.valueOf(customerId)).orElseThrow());
+        }
+        order.setCustomers(customers);
+
         order = service.createOrder(order);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderDto.fromOrder(order));
@@ -76,6 +83,12 @@ public class OrderController {
         }
         order.setSharedComments(sharedComments);
 
+        Set<Customer> customers = new HashSet<>();
+        for (String customerId : orderDto.getCustomers()) {
+            customers.add(customerRepository.findById(Long.valueOf(customerId)).orElseThrow());
+        }
+        order.setCustomers(customers);
+        
         order = service.updateOrder(order);
 
         return ResponseEntity.status(HttpStatus.OK).body(OrderDto.fromOrder(order));
