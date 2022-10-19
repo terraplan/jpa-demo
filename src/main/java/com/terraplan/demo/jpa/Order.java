@@ -27,8 +27,9 @@ public class Order {
 //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Place> places = new ArrayList<>();
 
-    // place example
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    // place example: place also be used for other Order objects
+    // orphanRemoval = true:: depends on whether we want to keep places ...
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Place place;
 
     // bidirectional many2many
