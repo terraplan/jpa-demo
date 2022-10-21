@@ -41,7 +41,7 @@ public class Order {
     private Set<Customer> customers = new HashSet<>();
 
     // map example
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL})
     // orphanRemoval is not supported, therefor we have to clean up by ourselves
     @MapKey(name = "day")
     @MapKeyEnumerated(EnumType.STRING)
