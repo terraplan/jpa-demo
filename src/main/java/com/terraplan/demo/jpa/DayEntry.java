@@ -1,35 +1,35 @@
 package com.terraplan.demo.jpa;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
-public class OrderItem {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DayEntry {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    @ManyToOne
-    private Order order;
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek day;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderItem orderItem = (OrderItem) o;
+        DayEntry dayEntry = (DayEntry) o;
 
-        return Objects.equals(id, orderItem.id);
+        return Objects.equals(id, dayEntry.id);
     }
 
     @Override

@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.DayOfWeek;
+import java.util.*;
 
 @Getter
 @Setter
@@ -43,4 +41,20 @@ public class Order {
     private Set<Customer> customers = new HashSet<>();
 
     // map example
+    @ManyToMany(cascade = {CascadeType.ALL})
+    // orphanRemoval is not supported, therefor we have to clean up by ourselves
+    @MapKey(name = "day")
+    @MapKeyEnumerated(EnumType.STRING)
+    private Map<DayOfWeek, DayEntry> days = new EnumMap<>(DayOfWeek.class);
+
+    public void updateOrderItems(List<OrderItem> orderItems) {
+        this.orderItems.clear();
+        this.orderItems.addAll(orderItems);
+        this.orderItems.forEach(orderItem -> orderItem.setOrder(this));
+    }
+
+    public void updateDays(Map<DayOfWeek, DayEntry> days) {
+        this.days.clear();
+        this.days.putAll(days);
+    }
 }

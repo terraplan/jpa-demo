@@ -2,10 +2,8 @@ package com.terraplan.demo.jpa;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.DayOfWeek;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -18,6 +16,7 @@ public class OrderDto {
     private List<String> comments = new ArrayList<>();
     private Set<String> sharedComments = new HashSet<>();
     private Set<String> customers = new HashSet<>();
+    private Map<DayOfWeek, DayEntryDto> days = new EnumMap<>(DayOfWeek.class);
 
     public static OrderDto fromOrder(Order order) {
         OrderDto orderDto = new OrderDto();
@@ -28,6 +27,10 @@ public class OrderDto {
         orderDto.setComments(order.getComments().stream().map(comment -> comment.getId().toString()).toList());
         orderDto.setSharedComments(order.getSharedComments().stream().map(comment -> comment.getId().toString()).collect(Collectors.toSet()));
         orderDto.setCustomers(order.getCustomers().stream().map(customer -> customer.getId().toString()).collect(Collectors.toSet()));
+        for (DayOfWeek dayOfWeek : order.getDays().keySet()) {
+            DayEntry dayEntry = order.getDays().get(dayOfWeek);
+            orderDto.days.put(dayOfWeek, new DayEntryDto(dayEntry.getId().toString(), dayEntry.getName()));
+        }
         return orderDto;
     }
 
