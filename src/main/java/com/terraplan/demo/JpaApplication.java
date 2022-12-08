@@ -1,4 +1,4 @@
-package com.terraplan.demo.jpa;
+package com.terraplan.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
